@@ -163,17 +163,17 @@ end
 if servernode['rdiff-backup']['server']['nagios']['alerts']
 
   # Copy over the check_rdiff and check_rdiff_log nrpe plugins.
-  directory servernode['rdiff-backup']['server']['nagios']['plugin-dir'] do
+  directory servernode['nagios']['plugin_dir'] do
     mode '775'
     recursive true
     action :create
   end
-  cookbook_file File.join(servernode['rdiff-backup']['server']['nagios']['plugin-dir'], 'check_rdiff') do
+  cookbook_file File.join(servernode['nagios']['plugin_dir'], 'check_rdiff') do
     source File.join('nagios', 'plugins', 'check_rdiff')
     mode '775'
     action :create
   end
-  cookbook_file File.join(servernode['rdiff-backup']['server']['nagios']['plugin-dir'], 'check_rdiff_log') do
+  cookbook_file File.join(servernode['nagios']['plugin_dir'], 'check_rdiff_log') do
     source File.join('nagios', 'plugins', 'check_rdiff_log')
     mode '775'
     action :create
@@ -362,7 +362,7 @@ jobs.each do |job|
     services << newservice
 
     nagios_nrpecheck nrpecheckname do
-      command "sudo #{servernode['rdiff-backup']['server']['nagios']['plugin-dir']}/check_rdiff -r #{dd} -w #{latefinwarn} -c #{latefincrit} -l #{maxchange} -p #{latestart}"
+      command "sudo #{servernode['nagios']['plugin_dir']}/check_rdiff -r #{dd} -w #{latefinwarn} -c #{latefincrit} -l #{maxchange} -p #{latestart}"
       action :add
     end
 
@@ -383,7 +383,7 @@ if servernode['rdiff-backup']['server']['nagios']['alerts']
   services << newservice
 
   nagios_nrpecheck nrpecheckname do
-    command "sudo #{servernode['rdiff-backup']['server']['nagios']['plugin-dir']}/check_rdiff_log"
+    command "sudo #{servernode['nagios']['plugin_dir']}/check_rdiff_log"
     action :add
   end
 else
